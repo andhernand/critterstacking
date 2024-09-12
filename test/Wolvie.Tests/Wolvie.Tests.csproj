@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Wolvie\Wolvie.csproj" />
+      <ProjectReference Include="..\..\src\Wolvie\Wolvie.csproj" />
     </ItemGroup>
 
 </Project>

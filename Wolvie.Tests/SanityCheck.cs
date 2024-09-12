@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace Wolvie.Tests;
 
-public class SanityCheckTests(WolvieFactory wolvieFactory) : IClassFixture<WolvieFactory>, IDisposable
+public class SanityCheck(WolvieFactory wolvieFactory) : IClassFixture<WolvieFactory>, IDisposable
 {
     private readonly HttpClient _client = wolvieFactory.CreateClient();
 

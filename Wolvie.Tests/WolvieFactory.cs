@@ -17,7 +17,7 @@ public class WolvieFactory : WebApplicationFactory<IWolvieMarker>, IAsyncLifetim
         .Build();
 
     private readonly RabbitMqContainer _rabbitMqContainer = new RabbitMqBuilder()
-        .WithImage("rabbitmq:3.13.7-management")
+        .WithImage("rabbitmq:3.13.7")
         .WithUsername("rabbitmq")
         .WithPassword("rabbitmq")
         .Build();

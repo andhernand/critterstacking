@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{31FFFF10-5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolvie", "src\Wolvie\Wolvie.csproj", "{C061F29D-F88A-46FC-B771-A0FB9D347F57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolvie.Tests", "Wolvie.Tests\Wolvie.Tests.csproj", "{D50D3AAD-4285-4729-BF9C-F218210E7BAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolvie.Tests", "test\Wolvie.Tests\Wolvie.Tests.csproj", "{D50D3AAD-4285-4729-BF9C-F218210E7BAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

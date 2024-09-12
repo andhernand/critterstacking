@@ -1,0 +1,54 @@
+name: critter-stacking
+
+networks:
+  critter-stacking:
+    driver: bridge
+
+volumes:
+  postgres:
+  rabbitmq:
+  pgadmin:
+
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:16.4
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DATABASE=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - critter-stacking
+  
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.13.7-management
+    restart: unless-stopped
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - critter-stacking
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:8.11.0
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - critter-stacking

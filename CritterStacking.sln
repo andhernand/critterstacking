@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotfiles", "dotfiles", "{5ECDE837-C138-40A4-A8D8-779590FFFA4E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.env = .env
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		docker-compose.yml = docker-compose.yml
+		global.json = global.json
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D8FF4EF4-B40D-40FF-985B-E473DA8D7AE5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{31FFFF10-5039-4545-BE9C-4606868798E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolvie", "src\Wolvie\Wolvie.csproj", "{C061F29D-F88A-46FC-B771-A0FB9D347F57}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C061F29D-F88A-46FC-B771-A0FB9D347F57} = {D8FF4EF4-B40D-40FF-985B-E473DA8D7AE5}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C061F29D-F88A-46FC-B771-A0FB9D347F57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C061F29D-F88A-46FC-B771-A0FB9D347F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C061F29D-F88A-46FC-B771-A0FB9D347F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C061F29D-F88A-46FC-B771-A0FB9D347F57}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

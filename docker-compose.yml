@@ -30,6 +30,9 @@ services:
     container_name: rabbitmq
     image: rabbitmq:3.13.7-management
     restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
     volumes:
       - rabbitmq:/var/lib/rabbitmq
     ports:

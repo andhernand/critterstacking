@@ -1,15 +1,18 @@
-using Wolvie.Commands;
 using Wolvie.Repositories;
 
-namespace Wolvie.Handlers;
+namespace Wolvie.Issues;
 
 public static class AssignUserHandler
 {
-    public static IssueAssigned Handle(AssignIssue command, IssueRepository issues)
+    public static void Handle(AssignIssue command, IssueRepository issues)
     {
         var issue = issues.Get(command.IssueId);
+        if (issue is null)
+        {
+            return;
+        }
+
         issue.AssigneeId = command.AssigneeId;
         issues.Store(issue);
-        return new IssueAssigned(issue.Id);
     }
 }

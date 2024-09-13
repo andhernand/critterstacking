@@ -11,13 +11,10 @@ public class IssueRepository
         _issues[issue.Id] = issue;
     }
 
-    public Issue Get(Ulid id)
+    public Issue? Get(Ulid id)
     {
-        if (_issues.TryGetValue(id, out var issue))
-        {
-            return issue;
-        }
-
-        throw new ArgumentOutOfRangeException(nameof(id), "Issue does not exist");
+        return _issues.TryGetValue(id, out var issue)
+            ? issue
+            : null;
     }
 }

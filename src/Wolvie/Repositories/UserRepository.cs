@@ -11,13 +11,10 @@ public class UserRepository
         _users[user.Id] = user;
     }
 
-    public User Get(Ulid id)
+    public User? Get(Ulid id)
     {
-        if (_users.TryGetValue(id, out var user))
-        {
-            return user;
-        }
-
-        throw new ArgumentOutOfRangeException(nameof(id), "User does not exist");
+        return _users.TryGetValue(id, out var user)
+            ? user
+            : null;
     }
 }

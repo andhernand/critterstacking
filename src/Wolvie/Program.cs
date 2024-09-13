@@ -1,5 +1,3 @@
-using System.Net.Mime;
-
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
@@ -11,9 +9,10 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 using Wolverine;
 
-using Wolvie.Commands;
 using Wolvie.Extensions;
+using Wolvie.Issues;
 using Wolvie.Repositories;
+using Wolvie.Users;
 
 Log.Logger = Logging.CreateBootstrapLogger();
 
@@ -49,39 +48,8 @@ await using var app = builder.Build();
 
     app.UseHttpsRedirection();
     app.UseSerilogRequestLogging();
-
-    app.MapPost("/issues/create", async (CreateIssue body, IMessageBus bus) =>
-        {
-            var created = await bus.InvokeAsync<IssueCreated>(body);
-            return TypedResults.Text(created.Id.ToString());
-        })
-        .WithName("CreateIssue")
-        .WithDescription("Create a new issue")
-        .WithTags("Issue")
-        .Accepts<CreateIssue>(contentType: MediaTypeNames.Application.Json)
-        .WithOpenApi();
-
-    app.MapPost("/issues/assign", async (AssignIssue body, IMessageBus bus) =>
-        {
-            await bus.InvokeAsync(body);
-            return TypedResults.Ok();
-        })
-        .WithName("AssignIssue")
-        .WithDescription("Assign an Issue to an existing User")
-        .WithTags("Issue")
-        .Accepts<AssignIssue>(contentType: MediaTypeNames.Application.Json)
-        .WithOpenApi();
-
-    app.MapPost("/users/create", async (CreateUser body, IMessageBus bus) =>
-        {
-            var created = await bus.InvokeAsync<UserCreated>(body);
-            return TypedResults.Text(created.Id.ToString());
-        })
-        .WithName("CreateUser")
-        .WithDescription("Create a new user")
-        .WithTags("User")
-        .Accepts<CreateUser>(contentType: MediaTypeNames.Application.Json)
-        .WithOpenApi();
+    app.MapIssuesEndpoints();
+    app.MapUsersEndpoints();
 }
 
 return await app.RunOaktonCommands(args);

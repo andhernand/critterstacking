@@ -6,10 +6,7 @@ namespace Wolvie.Handlers;
 
 public static class CreateIssueHandler
 {
-    public static async Task<IssueCreated> Handle(
-        CreateIssue command,
-        IssueRepository repository,
-        Serilog.ILogger logger)
+    public static IssueCreated Handle(CreateIssue command, IssueRepository repository)
     {
         var issue = new Issue
         {
@@ -19,9 +16,8 @@ public static class CreateIssueHandler
             Opened = DateTimeOffset.Now,
             OriginatorId = command.OriginatorId
         };
-        logger.Information("Creating {@Issue}", issue);
 
-        await repository.StoreAsync(issue);
+        repository.Store(issue);
         return new IssueCreated(issue.Id);
     }
 }

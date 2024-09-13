@@ -5,17 +5,11 @@ namespace Wolvie.Handlers;
 
 public static class AssignUserHandler
 {
-    public static async Task<IssueAssigned> Handle(
-        AssignIssue command,
-        IssueRepository issues,
-        Serilog.ILogger logger)
+    public static IssueAssigned Handle(AssignIssue command, IssueRepository issues)
     {
-        var issue = await issues.GetAsync(command.IssueId);
+        var issue = issues.Get(command.IssueId);
         issue.AssigneeId = command.AssigneeId;
-
-        logger.Information("Assigning {@Issue}", issue);
-
-        await issues.StoreAsync(issue);
+        issues.Store(issue);
         return new IssueAssigned(issue.Id);
     }
 }

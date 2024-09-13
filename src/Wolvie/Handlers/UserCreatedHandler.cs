@@ -5,12 +5,12 @@ namespace Wolvie.Handlers;
 
 public static class UserCreatedHandler
 {
-    public static async Task Handle(
+    public static void Handle(
         UserCreated created,
         UserRepository repository,
         Serilog.ILogger logger)
     {
-        var user = await repository.GetAsync(created.Id);
+        var user = repository.Get(created.Id);
         logger.Information("{@User} created", user);
     }
 }

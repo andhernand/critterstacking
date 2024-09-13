@@ -5,12 +5,9 @@ namespace Wolvie.Handlers;
 
 public static class IssueCreatedHandler
 {
-    public static async Task Handle(
-        IssueCreated created,
-        IssueRepository repository,
-        Serilog.ILogger logger)
+    public static void Handle(IssueCreated created, IssueRepository repository, Serilog.ILogger logger)
     {
-        var issue = await repository.GetAsync(created.Id);
+        var issue = repository.Get(created.Id);
         logger.Information("{@Issue} created", issue);
     }
 }

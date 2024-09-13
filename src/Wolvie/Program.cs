@@ -1,8 +1,13 @@
 using System.Net.Mime;
 
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+
 using Oakton;
 
 using Serilog;
+
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 using Wolverine;
 
@@ -12,66 +17,71 @@ using Wolvie.Repositories;
 
 Log.Logger = Logging.CreateBootstrapLogger();
 
-try
+Log.Information("Application starting...");
+
+var builder = WebApplication.CreateBuilder(args);
 {
-    Log.Information("Application starting...");
+    builder.Host.UseSerilog((context, logConfig) =>
+        logConfig.ReadFrom.Configuration(context.Configuration));
 
-    var builder = WebApplication.CreateBuilder(args);
-    {
-        builder.Host.UseSerilog((context, logConfig) =>
-            logConfig.ReadFrom.Configuration(context.Configuration));
+    builder.Host.UseWolverine();
 
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
-        builder.Host.UseWolverine();
-
-        builder.Services.AddSingleton<UserRepository>();
-        builder.Services.AddSingleton<IssueRepository>();
-    }
-
-    await using var app = builder.Build();
-    {
-        if (app.Environment.IsDevelopment())
+    builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>>(_ =>
+        new ConfigureOptions<SwaggerGenOptions>(options =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+            options.MapType<Ulid>(() => new OpenApiSchema { Type = "string", Format = "string" });
+        }));
 
-        app.UseHttpsRedirection();
-        app.UseSerilogRequestLogging();
+    builder.Services.AddSingleton<UserRepository>();
+    builder.Services.AddSingleton<IssueRepository>();
+}
 
-        app.MapPost("/issues/create", (CreateIssue body, IMessageBus bus) => bus.InvokeAsync(body))
-            .WithName("CreateIssue")
-            .WithDescription("Create a new issue")
-            .WithTags("Issue")
-            .Accepts<CreateIssue>(contentType: MediaTypeNames.Application.Json)
-            .WithOpenApi();
-
-        app.MapPost("/issues/assign", (AssignIssue body, IMessageBus bus) => bus.InvokeAsync(body))
-            .WithName("AssignIssue")
-            .WithDescription("Assign an Issue to an existing User")
-            .WithTags("Issue")
-            .Accepts<AssignIssue>(contentType: MediaTypeNames.Application.Json)
-            .WithOpenApi();
-
-        app.MapPost("/users/create", (CreateUser body, IMessageBus bus) => bus.InvokeAsync(body))
-            .WithName("CreateUser")
-            .WithDescription("Create a new user")
-            .WithTags("User")
-            .Accepts<CreateUser>(contentType: MediaTypeNames.Application.Json)
-            .WithOpenApi();
-
-        app.MapGet("/", () => Results.Redirect("/swagger"));
+await using var app = builder.Build();
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
 
-    await app.RunOaktonCommands(args);
+    app.UseHttpsRedirection();
+    app.UseSerilogRequestLogging();
+
+    app.MapPost("/issues/create", async (CreateIssue body, IMessageBus bus) =>
+        {
+            var created = await bus.InvokeAsync<IssueCreated>(body);
+            return TypedResults.Text(created.Id.ToString());
+        })
+        .WithName("CreateIssue")
+        .WithDescription("Create a new issue")
+        .WithTags("Issue")
+        .Accepts<CreateIssue>(contentType: MediaTypeNames.Application.Json)
+        .WithOpenApi();
+
+    app.MapPost("/issues/assign", async (AssignIssue body, IMessageBus bus) =>
+        {
+            await bus.InvokeAsync(body);
+            return TypedResults.Ok();
+        })
+        .WithName("AssignIssue")
+        .WithDescription("Assign an Issue to an existing User")
+        .WithTags("Issue")
+        .Accepts<AssignIssue>(contentType: MediaTypeNames.Application.Json)
+        .WithOpenApi();
+
+    app.MapPost("/users/create", async (CreateUser body, IMessageBus bus) =>
+        {
+            var created = await bus.InvokeAsync<UserCreated>(body);
+            return TypedResults.Text(created.Id.ToString());
+        })
+        .WithName("CreateUser")
+        .WithDescription("Create a new user")
+        .WithTags("User")
+        .Accepts<CreateUser>(contentType: MediaTypeNames.Application.Json)
+        .WithOpenApi();
 }
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Application terminated unexpectedly");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
+
+return await app.RunOaktonCommands(args);

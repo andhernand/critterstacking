@@ -5,14 +5,14 @@ namespace Wolvie.Handlers;
 
 public static class UserAssignedHandler
 {
-    public static async Task Handle(
+    public static void Handle(
         IssueAssigned assigned,
-        UserRepository users,
         IssueRepository issues,
+        UserRepository users,
         Serilog.ILogger logger)
     {
-        var issue = await issues.GetAsync(assigned.Id);
-        var user = await users.GetAsync(issue.AssigneeId!.Value);
-        logger.Information("{UserId} was assigned {IssueId}", user.Id, issue.Id);
+        var issue = issues.Get(assigned.Id);
+        var user = users.Get(issue.AssigneeId!.Value);
+        logger.Information("User {UserId} was assigned Issue {IssueId}", user.Id, issue.Id);
     }
 }

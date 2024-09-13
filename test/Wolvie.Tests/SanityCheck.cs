@@ -4,21 +4,18 @@ using FluentAssertions;
 
 namespace Wolvie.Tests;
 
-public class SanityCheck(WolvieFactory wolvieFactory) : IClassFixture<WolvieFactory>, IDisposable
+public class SanityCheck(WolvieFactory wolvieFactory) : IClassFixture<WolvieFactory>
 {
-    private readonly HttpClient _client = wolvieFactory.CreateClient();
-
     [Fact]
     public async Task Swagger_WhenCalled_ReturnsOk()
     {
-        var response = await _client.GetAsync("/swagger");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-    }
+        // Arrange
+        var client = wolvieFactory.CreateClient();
 
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-        _client.Dispose();
-        wolvieFactory.Dispose();
+        // Act
+        var response = await client.GetAsync("/swagger");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 }

@@ -14,7 +14,7 @@ public class SanityCheck(WolvieFactory wolvieFactory) : IClassFixture<WolvieFact
     [Fact]
     public async Task Swagger_WhenCalled_ReturnsOk()
     {
-        var response = await _client.GetAsync("/swagger");
+        var response = await _client.GetAsync("/swagger/index.html");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 }

@@ -6,7 +6,6 @@ using Testcontainers.RabbitMq;
 
 namespace Wolvie.Tests;
 
-// ReSharper disable once ClassNeverInstantiated.Global
 public class WolvieFactory : WebApplicationFactory<IWolvieMarker>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
@@ -39,7 +38,5 @@ public class WolvieFactory : WebApplicationFactory<IWolvieMarker>, IAsyncLifetim
     {
         builder.UseSetting("ConnectionStrings:Postgres", _postgresContainer.GetConnectionString());
         builder.UseSetting("ConnectionStrings:RabbitMq", _rabbitMqContainer.GetConnectionString());
-
-        base.ConfigureWebHost(builder);
     }
 }

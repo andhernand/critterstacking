@@ -1,41 +1,23 @@
 using Serilog;
 
-using Wolvie.Extensions;
-
-Log.Logger = Logging.CreateBootstrapLogger();
-
-try
+var builder = WebApplication.CreateBuilder(args);
 {
-    Log.Information("Application starting...");
+    builder.Host.UseSerilog((context, logConfig) =>
+        logConfig.ReadFrom.Configuration(context.Configuration));
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
 
-    var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+{
+    if (app.Environment.IsDevelopment())
     {
-        builder.Host.UseSerilog((context, logConfig) =>
-            logConfig.ReadFrom.Configuration(context.Configuration));
-
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
 
-    await using var app = builder.Build();
-    {
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+    app.UseHttpsRedirection();
+    app.UseSerilogRequestLogging();
+}
 
-        app.UseHttpsRedirection();
-        app.UseSerilogRequestLogging();
-    }
-
-    app.Run();
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Application terminated unexpectedly");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
+app.Run();

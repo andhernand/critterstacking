@@ -38,7 +38,5 @@ public class WolvieFactory : WebApplicationFactory<IWolvieMarker>, IAsyncLifetim
     {
         builder.UseSetting("ConnectionStrings:Postgres", _postgresContainer.GetConnectionString());
         builder.UseSetting("ConnectionStrings:RabbitMq", _rabbitMqContainer.GetConnectionString());
-
-        base.ConfigureWebHost(builder);
     }
 }

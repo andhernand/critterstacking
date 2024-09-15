@@ -1,29 +1,24 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
-using Oakton;
-
 using Serilog;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 using Wolverine;
 
-using Wolvie.Extensions;
+using Wolvie;
 using Wolvie.Issues;
 using Wolvie.Repositories;
 using Wolvie.Users;
-
-Log.Logger = Logging.CreateBootstrapLogger();
-
-Log.Information("Application starting...");
 
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Host.UseSerilog((context, logConfig) =>
         logConfig.ReadFrom.Configuration(context.Configuration));
 
-    builder.Host.UseWolverine();
+    builder.Host.UseWolverine(options =>
+        options.ApplicationAssembly = typeof(IWolvieMarker).Assembly);
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -38,7 +33,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddSingleton<IssueRepository>();
 }
 
-await using var app = builder.Build();
+var app = builder.Build();
 {
     if (app.Environment.IsDevelopment())
     {
@@ -52,4 +47,4 @@ await using var app = builder.Build();
     app.MapUsersEndpoints();
 }
 
-return await app.RunOaktonCommands(args);
+app.Run();

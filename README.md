@@ -1,6 +1,6 @@
 # Critter Stacking
 
-A playground for the [Critter Stack](https://github.com/JasperFx).
+A playground for the [Critter Stack](https://github.com/JasperFx/).
 
 - [Marten](https://martendb.io/)
 - [Wolverine](https://wolverine.netlify.app/)
@@ -21,7 +21,7 @@ cd critterstacking
 
 ### Start PostgreSQL and RabbitMQ
 
-Make sure Docker Desktop is running, then execute the following command to start the [PostgreSQL](https://www.postgresql.org/) and [RabbitMQ](https://www.rabbitmq.com/) containers:
+Make sure Docker Desktop is running, then execute the following command to start the [PostgreSQL](https://www.postgresql.org/) container:
 
 ```bash
 docker-compose up -d
@@ -31,19 +31,18 @@ docker-compose up -d
 
 ```bash
 dotnet restore CritterStacking.sln
-dotnet build CritterStacking.sln 
+dotnet build CritterStacking.sln
 ```
 
 ### Integration Testing with Testcontainers
 
-[Testcontainers for .NET](https://dotnet.testcontainers.org/) is being used to create [PostgreSQL](https://www.postgresql.org/) and [RabbitMQ](https://www.rabbitmq.com/) containers for all integration tests. To run the tests, use the following command:
+[Testcontainers for .NET](https://dotnet.testcontainers.org/) is being used to create [PostgreSQL](https://www.postgresql.org/) container for all integration tests. To run the tests, use the following command:
 
 ```bash
 dotnet test CritterStacking.sln
 ```
 
 - [Testcontainers PostgreSQL Module](https://testcontainers.com/modules/postgresql/)
-- [Testcontainers RabbitMQ Module](https://testcontainers.com/modules/rabbitmq/)
 
 ## Contributing
 
@@ -52,3 +51,4 @@ Contributions are welcome! Please fork this repository and submit a pull request
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+

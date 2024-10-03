@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
+using Oakton;
+
 using Serilog;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -48,4 +50,4 @@ var app = builder.Build();
     app.MapUsersEndpoints();
 }
 
-app.Run();
+return await app.RunOaktonCommands(args);

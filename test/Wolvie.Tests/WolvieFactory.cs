@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 
+using Oakton;
+
 using Testcontainers.PostgreSql;
 
 namespace Wolvie.Tests;
@@ -16,6 +18,7 @@ public class WolvieFactory : WebApplicationFactory<IWolvieMarker>, IAsyncLifetim
 
     public async Task InitializeAsync()
     {
+        OaktonEnvironment.AutoStartHost = true;
         await _postgresContainer.StartAsync();
     }
 

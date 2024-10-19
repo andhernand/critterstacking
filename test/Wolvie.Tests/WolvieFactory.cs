@@ -8,7 +8,7 @@ namespace Wolvie.Tests;
 public class WolvieFactory : WebApplicationFactory<IWolvieMarker>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres:16.4")
+        .WithImage("postgres:17.0-alpine3.20")
         .WithDatabase("postgres")
         .WithUsername("postgres")
         .WithPassword("postgres")

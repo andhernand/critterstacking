@@ -17,4 +17,11 @@ public class SanityCheck(WolvieFactory wolvieFactory) : IClassFixture<WolvieFact
         var response = await _client.GetAsync("/swagger/index.html");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
+
+    [Fact]
+    public async Task Swagger_WhenJsonIsCalled_ReturnsOk()
+    {
+        var response = await _client.GetAsync("/swagger/v1/swagger.json");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
 }

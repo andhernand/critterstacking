@@ -1,3 +1,5 @@
+using Oakton;
+
 using Serilog;
 
 using Wolverine;
@@ -28,4 +30,4 @@ var app = builder.Build();
     app.UseSerilogRequestLogging();
 }
 
-app.Run();
+return await app.RunOaktonCommands(args);
